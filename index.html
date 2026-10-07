@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>My Calendar</title>
+
+<style>
+body {
+    font-family: Arial;
+    text-align: center;
+    background: #fff0f6;
+}
+
+.calendar {
+    width: 350px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 20px;
+}
+
+button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 10px;
+    background: hotpink;
+    color: white;
+}
+
+#month {
+    font-size: 25px;
+    margin: 20px;
+    font-weight: bold;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.day {
+    padding: 10px;
+}
+
+.week {
+    font-weight: bold;
+    color: hotpink;
+}
+
+.today {
+    background: hotpink;
+    color: white;
+    border-radius: 50%;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calendar">
+
+<h1>🌸 My Calendar</h1>
+
+<button id="prev">← Previous</button>
+<button id="now">Today</button>
+<button id="next">Next →</button>
+
+<div id="month"></div>
+
+<div class="grid" id="calendar"></div>
+
+</div>
+
+<script>
+
+let current = new Date();
+
+function calendar() {
+
+    let year = current.getFullYear();
+    let month = current.getMonth();
+
+    let first = new Date(year, month, 1).getDay();
+    let days = new Date(year, month + 1, 0).getDate();
+
+    let name = current.toLocaleString("en-US", {
+        month: "long"
+    });
+
+    document.getElementById("month").innerHTML =
+        name + " " + year;
+
+    let box = document.getElementById("calendar");
+
+    box.innerHTML = "";
+
+    let weeks = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+    for (let w of weeks) {
+
+        let x = document.createElement("div");
+
+        x.className = "day week";
+        x.innerHTML = w;
+
+        box.appendChild(x);
+    }
+
+    for (let i = 0; i < first; i++) {
+
+        let blank = document.createElement("div");
+
+        box.appendChild(blank);
+    }
+
+    for (let d = 1; d <= days; d++) {
+
+        let x = document.createElement("div");
+
+        x.className = "day";
+        x.innerHTML = d;
+
+        let today = new Date();
+
+        if (
+            d == today.getDate() &&
+            month == today.getMonth() &&
+            year == today.getFullYear()
+        ) {
+            x.className = "day today";
+        }
+
+        box.appendChild(x);
+    }
+}
+
+
+/* PREVIOUS */
+
+document.getElementById("prev").onclick = function() {
+
+    current.setMonth(current.getMonth() - 1);
+
+    calendar();
+};
+
+
+/* TODAY */
+
+document.getElementById("now").onclick = function() {
+
+    current = new Date();
+
+    calendar();
+};
+
+
+/* NEXT */
+
+document.getElementById("next").onclick = function() {
+
+    current.setMonth(current.getMonth() + 1);
+
+    calendar();
+};
+
+
+calendar();
+
+</script>
+
+</body>
+</html>
